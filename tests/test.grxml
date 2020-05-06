@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='utf-8'?>
+<grammar xml:lang="ru-RU" root="RootRule" mode="voice" version="1.0" xmlns="http://www.w3.org/2001/06/grammar" tag-format="semantics/1.0">
+  <rule id="RootRule">
+    <one-of>
+      <item>a</item>
+      <item>b</item>
+      <item>c</item>
+      <item>d</item>
+      <item>e</item>
+      <item>f</item>
+    </one-of>
+  </rule>
+</grammar>

@@ -1,0 +1,8 @@
+version: '2'
+services:
+    web:
+        build: .
+        command: gunicorn web.servlet:app -c guniconf.py
+        ports:
+            - "8090:8090"
+        restart: on-failure

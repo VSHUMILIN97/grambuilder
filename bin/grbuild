@@ -1,0 +1,8 @@
+#!/usr/bin/env python3.6
+
+from builder.api import console
+
+
+if __name__ == '__main__':
+    status_code = console()
+    exit(status_code)

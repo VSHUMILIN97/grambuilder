@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>GramBuilder</title>
+    <!-- Load Vue.js -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <!-- Load Bootstrap styles for BootstrapVue -->
+    <script src="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.js"></script>
+    <link type="text/css" rel="stylesheet" href="//unpkg.com/bootstrap/dist/css/bootstrap.min.css" />
+    <link type="text/css" rel="stylesheet" href="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.css" />
+    <!-- Load axious -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<body class="background">
+    <div style="text-align: center">
+        <div id="gr-builder-form" class="container">
+        <b-form @submit="onSubmit">
+            <b-form-group
+                id="input-name-help"
+                label="Название грамматики:"
+                label-for="input-name"
+                description="Пр: grTPlusAuthorizationRU_ru"
+            >
+                <b-form-input
+                    id="input-name"
+                    v-model="form.name"
+                    type="text"
+                    size="lg"
+                    required
+                    placeholder="Укажите имя грамматики"
+                ></b-form-input>
+            </b-form-group>
+            <b-form-group
+                id="input-text-help"
+                label="Текстовки для грамматики:"
+                label-for="input-text"
+                description="Текстовый файл с нормализированными вариантами"
+            >
+                <b-form-file
+                    v-model="form.file"
+                    :state="Boolean(form.file)"
+                    placeholder="Choose a file or drop it here..."
+                    drop-placeholder="Drop file here..."
+                    size="lg"
+                ></b-form-file>
+            </b-form-group>
+            <b-button type="submit" variant="primary">Submit</b-button>
+        </b-form>
+    </div>
+    </div>
+
+<script>
+  new Vue({
+      el: '#gr-builder-form',
+    data() {
+      return {
+        form: {
+          file: null,
+          name: '',
+        },
+      }
+    },
+    methods: {
+      onSubmit(evt) {
+          evt.preventDefault();
+          let formData = new FormData();
+          formData.append('name', this.form.name);
+          formData.append('file', this.form.file);
+          axios({
+              method: 'post',
+              url: window.location.href + 'build/',
+              data: formData
+          }).then((response) => {
+                const url = window.URL.createObjectURL(new Blob([response.data]));
+                const link = document.createElement('a');
+                link.href = url;
+                link.setAttribute('download', this.form.name + '.grxml');
+                document.body.appendChild(link);
+                link.click();
+          }, (error) => {
+              console.log(error);
+              this.$bvToast.toast(
+                  'Файл не был обработан корректно, проверьте содержимое', {
+                      title: 'Ошибка импорта файла',
+                      variant: 'danger',
+                      solid: true,
+                      autoHideDelay: 50000
+                  }
+              )
+          });
+          this.form.text = '';
+          this.form.file = null;
+      }
+    }
+  })
+</script>
+</body>
+<style>
+    .background {
+        background: -moz-linear-gradient(-45deg, rgba(246,246,246,1) 0%, rgb(237, 176, 68) 70%, rgb(232, 130, 19) 100%);
+        background: -webkit-linear-gradient(-45deg, rgba(246,246,246,1) 0%, rgb(237, 176, 68) 70%, rgb(232, 130, 19) 100%);
+        background: -o-linear-gradient(-45deg, rgba(246,246,246,1) 0%, rgb(237, 176, 68) 70%, rgb(232, 150, 31) 100%);
+        background: -ms-linear-gradient(-45deg, rgba(246,246,246,1) 0%, rgb(237, 176, 68) 70%, rgb(232, 150, 31) 100%);
+        background: linear-gradient(135deg, rgba(246,246,246,1) 0%, rgb(237, 176, 68) 70%, rgb(232, 150, 31) 100%);
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        height: 100%;
+}
+    .container {
+        width: 80%;
+        height: 90%;
+        display: inline-block;
+        margin-top: 10%;
+    }
+</style>
+</html>

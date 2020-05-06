@@ -1,0 +1,28 @@
+[tool.poetry]
+name = "nau-grxml-builder"
+version = "0.1.0"
+description = "Builder for SRGS standard simple .grxml grammars"
+authors = ["VShumilin <vshumilin1488@gmail.com>"]
+license = "MIT"
+include = ["builder/py.typed"]
+packages = [
+    { include = "builder" }
+]
+
+[tool.poetry.dependencies]
+python = "^3.6"
+aiohttp = "^3.6"
+aiohttp-jinja2 = "~1.2.0"
+attrs = "~19"
+click = "^7.0"
+gunicorn = "~20"
+lxml = "^4.3.1"
+typing-extensions = "3.7.4.1"
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.3.1"
+pytest-aiohttp = "0.3.0"
+
+[build-system]
+requires = ["poetry==0.12.11"]
+build-backend = "poetry.masonry.api"
